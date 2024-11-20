@@ -1,0 +1,15 @@
+{
+    "total_views": 170,
+    "repositories": {
+        "MyAwesomeRepo": {
+            "views": 167
+        },
+        "default-repo": {
+            "views": 2
+        },
+        "GitHubViewsCounter": {
+            "views": 1
+        }
+    },
+    "start_date": "2024-11-20 13:33:24"
+}
