@@ -127,14 +127,14 @@ Initially, we aimed to track visitor countries using IP-based geolocation, but e
 
   - **Light Mode - Live:**
   - https://github.com/openlab-x/GitHubViewsCounter
-  - ![GitHub Stats](http://localhost/githubviewscounter/api/gitvcr.php?username=openlab-x&repository=GitHubViewsCounter&theme=light)
+  - ![GitHubViewsCounter](https://openlabx.com/githubviewscounter/api/gitvcr.php?username=openlab-x&repository=GitHubViewsCounter&theme=light)
   - [Made With GitHubViewsCounter](https://github.com/openlab-x/GitHubViewsCounter)
 
 <br>
 
   - **Dark Mode - Live:**
   - https://github.com/openlab-x
-  - ![GitHub Stats](http://localhost/githubviewscounter/api/gitvcmp.php?username=openlab-x&theme=dark)
+  - ![GitHubViewsCounter](https://openlabx.com/githubviewscounter/api/gitvcmp.php?username=openlab-x&theme=dark)
   - [Made With GitHubViewsCounter](https://github.com/openlab-x/GitHubViewsCounter)
 
 <br>
