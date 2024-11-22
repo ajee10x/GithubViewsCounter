@@ -1,4 +1,4 @@
-# GitHubViewsCounter ![GitHubViewsCounter](https://openlabx.com/githubviewscounter/api/gitvcr.php?username=openlab-x&repository=GithubViewsCounter&theme=dark) [<img alt="Made With GitHubViewsCounter" src="https://openlabx.com/githubviewscounter/api/footer_image.php?theme=light" />](https://github.com/openlab-x/GitHubViewsCounter)
+# GitHubViewsCounter ![GitHubViewsCounter](https://openlabx.com/githubviewscounter/api/gitvcr.php?username=openlab-x&repository=GithubViewsCounter&theme=dark)
 
 ![GitHubViewsCounter](logo/logo_v1_0_0.png)
 
