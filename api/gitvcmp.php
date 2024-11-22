@@ -3,30 +3,23 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+// Include the theme configuration
+require_once __DIR__ . '/../config/theme_config.php';
+
 // Parameters
-$username = $_GET['username'] ?? 'default';
+$username = $_GET['username'] ?? null;
 $theme = $_GET['theme'] ?? 'light';
 $layout = $_GET['layout'] ?? 'vertical';
 
 // Optional custom colors
-$bgColorHex = $_GET['bgColor'] ?? ($theme === 'dark' ? '222222' : 'FFFFFF');
-$textColorHex = $_GET['textColor'] ?? ($theme === 'dark' ? 'FFFFFF' : '000000');
-$borderColorHex = $_GET['borderColor'] ?? ($theme === 'dark' ? 'FFFFFF' : '000000');
+$bgColorHex = $_GET['bgColor'] ?? null;
+$textColorHex = $_GET['textColor'] ?? null;
+$borderColorHex = $_GET['borderColor'] ?? null;
 
-// Convert hex colors to RGB
-function hexToRgb($hex)
-{
-    $hex = str_replace("#", "", $hex);
-    return [
-        hexdec(substr($hex, 0, 2)),
-        hexdec(substr($hex, 2, 2)),
-        hexdec(substr($hex, 4, 2))
-    ];
+// Validate username existence
+if (!$username || !validateUsername($username)) {
+    outputErrorImage("Invalid Username: $username");
 }
-
-$bgColorRgb = hexToRgb($bgColorHex);
-$textColorRgb = hexToRgb($textColorHex);
-$borderColorRgb = hexToRgb($borderColorHex);
 
 // File paths
 $dataDir = __DIR__ . '/../data/';
@@ -52,7 +45,7 @@ if (!isset($userData['start_date'])) {
     $userData['start_date'] = date("Y-m-d H:i:s");
 }
 
-// Calculate total views dynamically
+// Dynamically calculate total views
 $userData['total_views'] = array_sum(array_column($userData['repositories'], 'views'));
 
 // Save updated user data
@@ -76,6 +69,9 @@ uasort($userData['repositories'], function ($a, $b) {
     return $b['views'] - $a['views'];
 });
 
+// Get colors for the selected theme
+$colors = getThemeColors($theme, $bgColorHex, $textColorHex, $borderColorHex);
+
 // Prepare the image
 header("Content-Type: image/png");
 $width = ($layout === 'horizontal') ? 500 : 400;
@@ -83,9 +79,9 @@ $height = 100 + (count($userData['repositories']) * 20) + 80; // Adjust height f
 $image = imagecreatetruecolor($width, $height);
 
 // Colors
-$bgColor = imagecolorallocate($image, $bgColorRgb[0], $bgColorRgb[1], $bgColorRgb[2]);
-$textColor = imagecolorallocate($image, $textColorRgb[0], $textColorRgb[1], $textColorRgb[2]);
-$borderColor = imagecolorallocate($image, $borderColorRgb[0], $borderColorRgb[1], $borderColorRgb[2]);
+$bgColor = imagecolorallocate($image, $colors['bgColor'][0], $colors['bgColor'][1], $colors['bgColor'][2]);
+$textColor = imagecolorallocate($image, $colors['textColor'][0], $colors['textColor'][1], $colors['textColor'][2]);
+$borderColor = imagecolorallocate($image, $colors['borderColor'][0], $colors['borderColor'][1], $colors['borderColor'][2]);
 
 // Fill background and border
 imagefill($image, 0, 0, $bgColor);
@@ -120,4 +116,41 @@ imagestring($image, 3, 10, $y, "Users using GitHubViewsCounter: $totalUsersUsing
 // Output the image
 imagepng($image);
 imagedestroy($image);
-?>
+
+/**
+ * Validate if the username exists by sending an HTTP HEAD request to the GitHub profile
+ */
+function validateUsername($username)
+{
+    $url = "https://github.com/$username";
+
+    // Initialize a cURL session
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_NOBODY, true);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+    curl_exec($ch);
+
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    // Return true if the profile exists (HTTP 200)
+    return $httpCode === 200;
+}
+
+/**
+ * Output an error image
+ */
+function outputErrorImage($message)
+{
+    header("Content-Type: image/png");
+    $image = imagecreatetruecolor(400, 100);
+    $bgColor = imagecolorallocate($image, 255, 0, 0);
+    $textColor = imagecolorallocate($image, 255, 255, 255);
+    imagefill($image, 0, 0, $bgColor);
+    imagestring($image, 5, 10, 10, "Error:", $textColor);
+    imagestring($image, 4, 10, 40, $message, $textColor);
+    imagepng($image);
+    imagedestroy($image);
+    exit();
+}
