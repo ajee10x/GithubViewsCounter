@@ -1,150 +1,163 @@
+
+
 # GitHubViewsCounter
 
 ![GitHubViewsCounter](logo/logo_v1_0_0.png)
 
+---
 
 ## About
 
-**GitHubViewsCounter** is an open-source, lightweight tool to track and display the total views of GitHub repositories or profiles in real-time. Designed to work seamlessly in GitHub README files, it dynamically updates every time someone visits your repository or profile.
+**GitHubViewsCounter** is an open-source, lightweight tool to track and display the total views of GitHub repositories or profiles in real-time. It is designed to work seamlessly in GitHub README files and dynamically updates every time someone visits your repository or profile.
 
 
-- [About](#about)
+## Table of Contents
+
 - [Features](#features)
-- [Challenges and Design Decisions](#challenges-and-design-decisions)
-- [Getting Started](#getting-started)
-  - [Clone the Repository](#clone-the-repository)
-  - [Set Up a Local Server](#set-up-a-local-server)
-  - [Adjust Permissions](#adjust-permissions)
-- [Platforms Tested](#platforms-tested)
 - [Live Demo and Examples](#live-demo-and-examples)
-- [Customization](#customization)
-  - [Themes](#themes)
-  - [Custom Colors](#custom-colors)
-    - [Example Repo Customization](#example-repo-customization)
-    - [Example Main Profile Customization](#example-main-profile-customization)
+- [Getting Started](#getting-started)
 - [Usage](#usage)
-  - [For a Repository Specific Counter](#for-a-repository-specific-counter)
-  - [For a Main Profile Counter](#for-a-main-profile-counter)
+  - [Repository View Counter](#repository-view-counter)
+  - [Profile View Counter](#profile-view-counter)
+- [Customization](#customization)
 - [Technology Stack](#technology-stack)
-- [Contributing](#contributing)
+- [Challenges and Design Decisions](#challenges-and-design-decisions)
 - [Acknowledgments](#acknowledgments)
 - [Bug Reporting](#bug-reporting)
 - [License](#license)
 - [Code of Conduct](#code-of-conduct)
 - [Contact](#contact)
 
+
+
 ## Features
 
-1. **Total Views Counter**:
-   - Displays the total number of views for a single repository or all repositories combined for a user.
+1. **Dynamic Total Views Counter**:
+   - Automatically updates when someone accesses your GitHub README.md.
 
-2. **Sorted Repositories**:
-   - Repositories are sorted by views (highest to lowest) in the main profile counter.
+2. **Valid Repository Verification**:
+   - Ensures valid repositories and usernames by sending an **HTTP HEAD request** to verify repository existence.
 
 3. **Customizable Themes**:
    - Offers `light`, `dark`, and fully customizable themes (background, text, and border colors).
 
-4. **Dynamic Updates**:
-   - Automatically updates view counts whenever the counter URL is accessed.
+4. **Responsive Design**:
+   - Works on any screen size and aligns perfectly in GitHub README files.
 
-5. **User Tracker**:
-   - Tracks the total number of unique users utilizing GitHubViewsCounter, displayed in the counters.
+5. **Sorted Repositories**:
+   - Displays repositories sorted by views (highest to lowest).
 
-6. **Simple and Lightweight**:
-   - No database dependencies — uses JSON files for data storage, ensuring speed and simplicity.
+6. **Protected Data**:
+   - Uses IP-based proxy-safe tracking, compatible with GitHub's `camo` system.
 
-7. **Designed for GitHub**:
-   - Perfect for embedding in GitHub README files for profiles or repositories.
-
-8. **Ready to use**:
-   - It's easy and ready to use without self hosting, all you need to do is to use our link in your Readne.md, for your main profile or any repositoory that you have.
+7. **Live Counter for Users**:
+   - Tracks the total number of users utilizing GitHubViewsCounter, displayed on counters.
 
 
-
-## Challenges and Design Decisions
-
-### 1. Why Can't We Detect Visitors by Country?
-Initially, we aimed to track visitor countries using IP-based geolocation, but encountered the following issues:
-   - **GitHub Proxy Servers**:
-     - GitHub serves README images via its own proxy (e.g., `camo.githubusercontent.com`), which obscures the original IP address of visitors.
-     - As a result, all visits appear to originate from GitHub's servers, making geolocation impossible.
-   - **Privacy Compliance**:
-     - Even if real IPs were accessible, using them could violate GitHub's privacy policies and laws like GDPR.
-
-**Solution**: We simplified the system to focus on counting overall views instead of tracking visitor locations.
-
-### 2. Dynamic View Calculation
-   - To ensure data integrity, we calculate total views dynamically by summing all repository views instead of relying on static counters:
-     ```php
-     $userData['total_views'] = array_sum(array_column($userData['repositories'], 'views'));
-     ```
-
-### 3. Sorting Repositories
-   - Repositories are automatically sorted by views in descending order for better visibility in the profile-wide counter:
-     ```php
-     uasort($userData['repositories'], function ($a, $b) {
-         return $b['views'] - $a['views'];
-     });
-     ```
-
-### 4. Modular Structure
-   - The project is organized for scalability and maintainability, with separate scripts for repository-specific and profile-wide counters.
-
-## Getting Started
-
-
-### 1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/openlab-x/GitHubViewsCounter.git
-   cd GitHubViewsCounter
-   ```
-
-### 2. **Set Up a Local Server**:
-   - Use PHP’s built-in server:
-     ```bash
-     php -S localhost:8000 -t public/
-     ```
-   - Or deploy on Apache/Nginx.
-
-   - Or simply use XAMPP on Windows or Mac or Linux
-
-### 3. **Adjust Permissions**:
-   ```bash
-   chmod -R 755 data/
-   ```
-
-
-## Platforms Tested
-- [x] Web: Fully functional on major browsers like Chrome, Firefox, and Edge.
-- [x] Github Readme-md.
-- [x] Local Readme-md.
-- [x] Visual studio code readme preview.
-- [x] As an external image for any webstie.
-- [x] As an Iframe.
 
 ## Live Demo and Examples
 
+### Live Demos
 
-  - **Light Mode - Live:**
-  - https://github.com/openlab-x/GitHubViewsCounter
-  - ![GitHubViewsCounter](https://openlabx.com/githubviewscounter/api/gitvcr.php?username=openlab-x&repository=GitHubViewsCounter&theme=light)
-  - [Made With GitHubViewsCounter](https://github.com/openlab-x/GitHubViewsCounter)
-
-<br>
-
-  - **Dark Mode - Live:**
-  - https://github.com/openlab-x
-  - ![GitHubViewsCounter](https://openlabx.com/githubviewscounter/api/gitvcmp.php?username=openlab-x&theme=dark)
-  - [Made With GitHubViewsCounter](https://github.com/openlab-x/GitHubViewsCounter)
+- **Repository View Counter (Light Theme)**:
+  ```markdown
+  ![GitHubViewsCounter](https://openlabx.com/githubviewscounter/api/gitvcr.php?username=openlab-x&repository=OpenQRCode&theme=light)
+  ```
+  **Preview**:
+![GitHubViewsCounter](https://openlabx.com/githubviewscounter/api/gitvcr.php?username=openlab-x&repository=OpenQRCode&theme=light) [<img alt="Made With GitHubViewsCounter" src="https://openlabx.com/githubviewscounter/api/footer_image.php?theme=light" />](https://github.com/openlab-x/GitHubViewsCounter)
 
 <br>
 
+- **Repository View Counter if the repository doesn't exist**:
+  ```markdown
+  ![GitHubViewsCounter](https://openlabx.com/githubviewscounter/api/gitvcr.php?username=openlab-x&repository=OpenQRCode&theme=light)
+  ```
+  **Preview**:
+![GitHubViewsCounter](https://openlabx.com/githubviewscounter/api/gitvcr.php?username=openlab-x&repository=ImagineDragon&theme=light) [<img alt="Made With GitHubViewsCounter" src="https://openlabx.com/githubviewscounter/api/footer_image.php?theme=light" />](https://github.com/openlab-x/GitHubViewsCounter)
+
+<br>
+
+- **Profile View Counter (Dark Theme)**:
+  ```markdown
+  ![GitHubViewsCounter](https://openlabx.com/githubviewscounter/api/gitvcmp.php?username=openlab-x&theme=dark)
+  ```
+  **Preview**:
+  ![GitHubViewsCounter](https://openlabx.com/githubviewscounter/api/gitvcmp.php?username=openlab-x&theme=dark)
+
+<br>
+
+- **Profile View Counter if the username doesn't exist**:
+  ```markdown
+  ![GitHubViewsCounter](https://openlabx.com/githubviewscounter/api/gitvcmp.php?username=CuttyGirl69&theme=dark)
+  ```
+  **Preview**:
+  ![GitHubViewsCounter](https://openlabx.com/githubviewscounter/api/gitvcmp.php?username=CuttyGirl69&theme=dark)
+
+
+---
+
+## Getting Started
+
+### 1. **Clone the Repository**
+```bash
+git clone https://github.com/openlab-x/GitHubViewsCounter.git
+cd GitHubViewsCounter
+```
+
+### 2. **Set Up a Local Server**
+- Use PHP’s built-in server:
+  ```bash
+  php -S localhost:8000 -t api/
+  ```
+- Alternatively, deploy on **Apache/Nginx** or use **XAMPP**.
+
+### 3. **Adjust Permissions**
+Ensure the `data/` directory is writable:
+```bash
+chmod -R 755 data/
+```
+
+---
+
+## Usage
+
+### Repository View Counter
+
+To add a view counter for a specific repository, use the following Markdown:
+```markdown
+![GitHubViewsCounter](https://openlabx.com/githubviewscounter/api/gitvcr.php?username=yourusername&repository=yourrepo&theme=light)
+```
+
+#### Example:
+```markdown
+![GitHubViewsCounter](https://openlabx.com/githubviewscounter/api/gitvcr.php?username=openlab-x&repository=OpenQRCode&theme=dark)
+```
+
+- [Made With GitHubViewsCounter](https://github.com/openlab-x/GitHubViewsCounter)
+
+---
+
+### Profile View Counter
+
+To display total views across all repositories:
+```markdown
+![GitHubViewsCounter](https://openlabx.com/githubviewscounter/api/gitvcmp.php?username=yourusername&theme=dark)
+```
+
+#### Example:
+```markdown
+![GitHubViewsCounter](https://openlabx.com/githubviewscounter/api/gitvcmp.php?username=openlab-x&theme=light)
+```
+
+- [Made With GitHubViewsCounter](https://github.com/openlab-x/GitHubViewsCounter)
+
+---
 
 ## Customization
 
 ### Themes
 - `theme=light`: Default light theme.
-- `theme=dark`: A darker theme for better contrast on dark backgrounds.
+- `theme=dark`: A darker theme.
 
 
 ### Custom Colors
@@ -155,65 +168,43 @@ You can define custom colors using hex values for the following parameters:
 | `textColor` | Text color (e.g., `textColor=FFFFFF`) |
 | `borderColor` | Border color (e.g., `borderColor=FF0000`) |
 
-#### Example Repo Customization
-```markdown
-![GitHubViewsCounter](https://openlabx.com/githubviewscounter/api/gitvcr.php?username=demo&repository=MyAwesomeRepo&bgColor=333333&textColor=00FF00&borderColor=FF0000)
-```
-#### Example Main Profile Customization
-```markdown
-![GitHubViewsCounter](https://openlabx.com/githubviewscounter/api/gitvcmp.php?username=demo&bgColor=333333&textColor=00FF00&borderColor=FF0000)
-```
-
-
-
-
-## Usage
-
-### For a Repository Specific Counter
-
-Add the following Markdown to your repository README and be sure it's `/api/gitvcr.php?`:
-
-```markdown
-![GitHubViewsCounter](https://openlabx.com/githubviewscounter/api/gitvcr.php?username=yourusername&repository=yourrepo&theme=light)
-
-  - [Made With GitHubViewsCounter](https://github.com/openlab-x/GitHubViewsCounter)
-```
-
 #### Example:
 ```markdown
-![GitHubViewsCounter](https://openlabx.com/githubviewscounter/api/gitvcr.php?username=demo&repository=MyAwesomeRepo&theme=dark)
-
-  - [Made With GitHubViewsCounter](https://github.com/openlab-x/GitHubViewsCounter)
+![GitHubViewsCounter](https://openlabx.com/githubviewscounter/api/gitvcr.php?username=openlab-x&repository=OpenQRCode&bgColor=333333&textColor=00FF00&borderColor=FF0000)
 ```
 
-### For a Main Profile Counter
-
-To display total views across all your repositories and be sure it's `/api/gitvcmp.php?`:
-
-```markdown
-![GitHubViewsCounter](https://openlabx.com/githubviewscounter/api/gitvcmp.php?username=yourusername&theme=light)
-
-  - [Made With GitHubViewsCounter](https://github.com/openlab-x/GitHubViewsCounter)
-```
-
-#### Example:
-```markdown
-![GitHubViewsCounter](https://openlabx.com/githubviewscounter/api/gitvcmp.php?username=demo&theme=dark)
-
-  - [Made With GitHubViewsCounter](https://github.com/openlab-x/GitHubViewsCounter)
-```
-
-
-
-
+---
 
 ## Technology Stack
-- PHP: The core programming language for processing view counts and generating dynamic images.
-- GD Library: Used for creating and rendering images with custom text and themes.
-- JSON: Lightweight and efficient storage format for user and repository data.
-- HTML/Markdown: To embed the counters as images in GitHub README files.
-- GitHub Proxy Handling: Ensures compatibility with GitHub’s camo.githubusercontent.com proxy for image requests.
-- Custom Theming: Allows developers to specify colors and styles dynamically via URL parameters.
+
+- **PHP**: Core backend logic for real-time tracking and dynamic image generation.
+- **GD Library**: Creates visually appealing and customizable counters.
+- **GitHub Proxy Handling**: Ensures compatibility with GitHub’s camo.githubusercontent.com proxy for image requests.
+- **cURL**: Validates repositories and usernames by sending an **HTTP HEAD request**.
+- **JSON**: Lightweight storage for tracking data.
+- **HTML/Markdown**: For embedding counters into GitHub README files.
+- **Custom Theming**: Allows developers to specify colors and styles dynamically via URL parameters.
+
+
+
+
+## Challenges and Design Decisions
+
+1. **No Country-Based Tracking**
+   - GitHub proxies images, masking visitor IPs. As a result, geolocation is impossible, as we wanted to display the views as based on country locations and show more details.
+   - To maintain simplicity and privacy, GitHubViewsCounter focuses solely on view counts.
+
+2. **Repository and Username Validation**
+   - Ensures users cannot add repositories or usernames they don’t own by sending **HTTP HEAD requests** to validate the URLs.
+
+3. **Dynamic Calculations**
+   - Total views and repository-specific views are recalculated dynamically for accuracy.
+
+4. **Modular Design**
+   - Separate scripts handle profile-wide counters (`gitvcmp.php`) and repository-specific counters (`gitvcr.php`).
+
+
+
 
 ## Contributing
  We welcome contributions! Here's how you can help:
@@ -227,49 +218,46 @@ To display total views across all your repositories and be sure it's `/api/gitvc
   7. Submit a pull request.
   8. Please make sure to update tests as appropriate.
 
-
-
 ## Acknowledgments
 
-- All Contributors: Thanks to everyone who contributed to the project.
-- OpenLabX Team: Special thanks to the team for developing and maintaining the project.
+Special thanks to the **OpenLabX Team** for developing this project and to all contributors.
 
 
 
 ## Bug Reporting
-- If you find a bug in this project, please do not hesistate to reach out to our team
-- If you are feeling helpful, please consider fixing the bug and making a pull request
-- We give our greatest thanks to any people who report or fix bugs in this project
+
+If you encounter a bug:
+1. Create an issue in the [GitHub Repository](https://github.com/openlab-x/GitHubViewsCounter/issues).
+2. Provide a detailed description, including steps to reproduce the issue.
 
 
 
 ## License
-This project is licensed under the [MIT license](LICENSE).
 
-## Code of conduct
+This project is licensed under the [MIT License](LICENSE).
 
-We are committed to fostering an open and welcoming environment. All participants in this project are expected to adhere to our [Code of Conduct](CODE_OF_CONDUCT.md), which outlines our expectations for respectful behavior and the steps for reporting unacceptable conduct.
+
+
+## Code of Conduct
+
+We aim to maintain a welcoming environment. Please follow our [Code of Conduct](CODE_OF_CONDUCT.md).
+
 
 ## Contact
 
-In pursuit of innovation,
-**OpenLabX Team**
+For inquiries, reach out to the **OpenLabX Team**:
 
-- **Website**: [https://openlabx.com](https://openlabx.com)
-- **Email**: contact@openlabx.com
+- Website: [https://openlabx.com](https://openlabx.com)
+- Email: contact@openlabx.com
 
 
 
 **Follow Us:**
-
 <div align="center">
-| <a href="https://www.instagram.com/openlabx_official/" target="_blank"><strong>Instagram</strong></a> |
+<a href="https://www.instagram.com/openlabx_official/" target="_blank"><strong>Instagram</strong></a> |
 <a href="https://x.com/openlabx" target="_blank"><strong>X (formerly Twitter)</strong></a> |
 <a href="https://www.facebook.com/openlabx/" target="_blank"><strong>Facebook</strong></a> |
 <a href="https://www.youtube.com/@OpenLabX" target="_blank"><strong>YouTube</strong></a> |
-<a href="https://github.com/openlab-x" target="_blank"><strong>GitHub</strong></a> |
+<a href="https://github.com/openlab-x" target="_blank"><strong>GitHub</strong></a>
 </div>
 
-<br>
-
-- [This README.md Made With ReadMeX](https://github.com/openlab-x/ReadMeX)
